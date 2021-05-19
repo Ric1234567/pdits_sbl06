@@ -3,6 +3,7 @@ package de.ur.pdits.cryptchat.network;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
@@ -14,6 +15,9 @@ import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
+
+import static de.ur.pdits.cryptchat.security.KeyExchange.executeClientSide;
+import static de.ur.pdits.cryptchat.security.KeyExchange.executeServerSide;
 
 public class ChatServer {
 
@@ -87,7 +91,9 @@ public class ChatServer {
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			e.printStackTrace();
 		}
-		connection.setEncryption(new Encryption(secretKey));
+
+		SecretKey testKey = executeServerSide(connection);
+		connection.setEncryption(new Encryption(testKey));
 
 		// CryptChat 2.0: Perform automatic KeyExchange using DiffieHellman to
 		// ensure Perfect Forward Secrecy

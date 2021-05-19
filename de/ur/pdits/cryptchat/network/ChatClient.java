@@ -15,6 +15,8 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import static de.ur.pdits.cryptchat.security.KeyExchange.executeClientSide;
+
 public class ChatClient {
 
 	public ChatClient(String serverHostname, int serverPort, File authKeyFile, File partnerAuthCertFile) {
@@ -73,7 +75,8 @@ public class ChatClient {
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			e.printStackTrace();
 		}
-		connection.setEncryption(new Encryption(secretKey));
+		SecretKey testKey = executeClientSide(connection);
+		connection.setEncryption(new Encryption(testKey));
 
 /*
 		KeyGenerator keyGen = null;
