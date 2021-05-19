@@ -13,13 +13,12 @@ public class Encryption {
 	private Cipher cipherEnc;
 	private Cipher cipherDec;
 
-
-
 	public Encryption(SecretKey symKey) {
-		// TODO: Init ciphers
+		// set init vector
 		byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 		IvParameterSpec ivspec = new IvParameterSpec(iv);
 
+		// init Cypher, using CBC Mode with PKCS5 Padding
 		try {
 			cipherEnc = Cipher.getInstance("AES/CBC/PKCS5Padding");
 			cipherEnc.init(Cipher.ENCRYPT_MODE, symKey, ivspec);
@@ -33,6 +32,7 @@ public class Encryption {
 	}
 
 	/**
+	 * Encrypt given plaintext with AES
 	 * @param plaintext
 	 *            The plaintext to be encrypted
 	 * @return The plaintext encrypted with the provided symKey by the cipher
@@ -51,6 +51,7 @@ public class Encryption {
 	}
 
 	/**
+	 * Decrypt given ciphertext with AES
 	 * @param ciphertext
 	 *            The ciphertext to be decrypted
 	 * @return The ciphertext decrypted with the provided symKey by the cipher

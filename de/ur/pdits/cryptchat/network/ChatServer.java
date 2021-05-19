@@ -75,11 +75,11 @@ public class ChatServer {
 	}
 
 	private void initEncryption(Connection connection) {
-		// TODO:
+	/*
 		// CryptChat 1.0: Initiate Cipher & hand it over to connection via
-		// Connection.setEncryption()
-		String SECRET_KEY = "my_super_secret_key_ho_ho_ho";
-		String SALT = "ssshhhhhhhhhhh!!!!";
+		String SECRET_KEY = "super-duper-geheimes-passwort";
+		String SALT = "Etwas Salz in die Suppe!";
+
 		SecretKey secretKey = null;
 
 		try {
@@ -91,12 +91,13 @@ public class ChatServer {
 		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
 			e.printStackTrace();
 		}
-
-		SecretKey testKey = executeServerSide(connection);
-		connection.setEncryption(new Encryption(testKey));
+	*/
 
 		// CryptChat 2.0: Perform automatic KeyExchange using DiffieHellman to
 		// ensure Perfect Forward Secrecy
-		
+		SecretKey secretKey = executeServerSide(connection);
+
+		// set Encryption
+		connection.setEncryption(new Encryption(secretKey));
 	}
 }
