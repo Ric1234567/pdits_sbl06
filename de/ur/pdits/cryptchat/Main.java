@@ -6,6 +6,8 @@ import java.util.HashSet;
 import de.ur.pdits.cryptchat.network.ChatClient;
 import de.ur.pdits.cryptchat.network.ChatServer;
 
+import javax.crypto.SecretKey;
+
 public class Main {
 
 	// run args

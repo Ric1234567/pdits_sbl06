@@ -3,8 +3,17 @@ package de.ur.pdits.cryptchat.network;
 import java.io.File;
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.KeySpec;
 
 import de.ur.pdits.cryptchat.security.Authentication;
+import de.ur.pdits.cryptchat.security.Encryption;
+
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
 
 public class ChatServer {
 
@@ -65,6 +74,21 @@ public class ChatServer {
 		// TODO:
 		// CryptChat 1.0: Initiate Cipher & hand it over to connection via
 		// Connection.setEncryption()
+		String SECRET_KEY = "my_super_secret_key_ho_ho_ho";
+		String SALT = "ssshhhhhhhhhhh!!!!";
+		SecretKey secretKey = null;
+
+		try {
+			SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
+			KeySpec spec = new PBEKeySpec(SECRET_KEY.toCharArray(), SALT.getBytes(), 65536, 256);
+			SecretKey tmp = factory.generateSecret(spec);
+			secretKey = new SecretKeySpec(tmp.getEncoded(), "AES");
+
+		} catch (NoSuchAlgorithmException | InvalidKeySpecException e) {
+			e.printStackTrace();
+		}
+		connection.setEncryption(new Encryption(secretKey));
+
 		// CryptChat 2.0: Perform automatic KeyExchange using DiffieHellman to
 		// ensure Perfect Forward Secrecy
 		

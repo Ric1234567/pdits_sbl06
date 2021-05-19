@@ -1,16 +1,35 @@
 package de.ur.pdits.cryptchat.security;
 
-import javax.crypto.Cipher;
-import javax.crypto.SecretKey;
+import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
+
 
 public class Encryption {
 
 	private Cipher cipherEnc;
 	private Cipher cipherDec;
 
+
+
 	public Encryption(SecretKey symKey) {
 		// TODO: Init ciphers
+		byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		IvParameterSpec ivspec = new IvParameterSpec(iv);
 
+		try {
+			cipherEnc = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			cipherEnc.init(Cipher.ENCRYPT_MODE, symKey, ivspec);
+
+			cipherDec = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			cipherDec.init(Cipher.DECRYPT_MODE, symKey, ivspec);
+
+		} catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidAlgorithmParameterException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -19,10 +38,16 @@ public class Encryption {
 	 * @return The plaintext encrypted with the provided symKey by the cipher
 	 *         defined inside the constructor
 	 */
-	public byte[] encryptSymmetrically(byte[] plaintext) {
-		// TODO: Execute encryption
+	public byte[] encryptSymmetrically(byte[] plaintext)  {
+		byte[] cipherText = new byte[plaintext.length];
 
-		return null;
+		try {
+			cipherText = cipherEnc.doFinal(plaintext);
+
+		} catch (IllegalBlockSizeException | BadPaddingException e) {
+			e.printStackTrace();
+		}
+		return cipherText;
 	}
 
 	/**
@@ -32,9 +57,15 @@ public class Encryption {
 	 *         defined inside the constructor
 	 */
 	public byte[] decryptSymmetrically(byte[] ciphertext) {
-		// TODO: Execute decryption
+		byte[] plainText = new byte[ciphertext.length];
 
-		return null;
+		try {
+			plainText = cipherDec.doFinal(ciphertext);
+
+		} catch (IllegalBlockSizeException | BadPaddingException e) {
+			e.printStackTrace();
+		}
+		return plainText;
 	}
 
 }
