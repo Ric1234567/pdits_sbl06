@@ -61,7 +61,7 @@ public class ChatClient {
 
 	private void initEncryption(Connection connection) {
 	/*
-		// CryptChat 1.0: Initiate Cipher & hand it over to connection via
+		// CryptChat 1.0: Initiate Cipher & hand it over to connection
 		String SECRET_KEY = "super-duper-geheimes-passwort";
 		String SALT = "Etwas Salz in die Suppe!";
 
